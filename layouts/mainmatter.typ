@@ -128,11 +128,10 @@
           width: 100%,
           {
             set text(size: 24pt)
-            v(1.5em)
             text([Chapter ] + counter(heading).display(it.numbering))
             linebreak()
             it.body
-            v(1em)
+            v(1.2cm)
           },
         ),
       )

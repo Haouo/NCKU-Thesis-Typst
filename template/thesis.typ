@@ -1,13 +1,28 @@
 #import "../layouts/whole.typ": whole
 #import "../layouts/mainmatter.typ": mainmatter
-#import "../layouts/appendix.typ": appendix
 #import "../pages/cover.typ": cover
 #import "../pages/outline.typ": *
+#import "../pages/approved-by.typ": approved_by
+#import "../pages/abstract.typ": *
 
-#show: whole
+#show: it => whole(lang_en: true, lang_zh_tw: false, it)
 
 // cover...
 #cover(degree: "master")
+
+#approved_by()
+
+#abstract_zh_tw(keywords: ("關鍵字一", "關鍵字二", "關鍵字三"))[
+  #lorem(200)
+
+  #lorem(100)
+]
+
+#abstract_en(keywords: ("key 1", "key 2", "key 3"))[
+  #lorem(200)
+
+  #lorem(100)
+]
 
 // list of ...
 
@@ -23,9 +38,17 @@
 
 = #lorem(5)
 
-== #lorem(4)
+#lorem(50)
+
+== #lorem(4) #context here().position()
+
+== asdasd #context here().position()
+
+#lorem(100)
 
 === #lorem(3)
+
+#lorem(5)
 
 #figure(
   image("images/test.jpg", height: 30%),

@@ -1,7 +1,7 @@
 #let mainmatter(it) = {
-  // Returns whether the current page has a chapter (top-level) heading.
+  // check whether the current heading is lavel-1 heading
   let is-chapter-start-page() = {
-    // Find chapter headings on the current page.
+    // find chapter headings on the current page.
     let all_level_one_heading = query(heading.where(level: 1))
     let current_page = here().page()
     return (
@@ -31,7 +31,8 @@
           .at(current_chapter_heading.location())
           .at(0)
 
-        smallcaps("Chapter " + str(current_chapter_number) + ".")
+        smallcaps([Chapter ] + str(current_chapter_number) + ".")
+        smallcaps[test]
         h(0.75em)
         smallcaps(current_chapter_heading.body)
         h(1fr)
@@ -54,55 +55,52 @@
     first-line-indent: 1em,
     linebreaks: "optimized",
   )
+  // WARN: par is not locatable
 
-
+  // set heading numbering rule
   set heading(numbering: "1.1.1")
 
+  // NOTE: heading rule 1 -> apply to all headings except for level-1 heading
   show heading: it => {
-    let loc = it.location()
-    let font_size = if it.level == 1 {
-      18pt
-    } else {
-      14pt
-    }
-    set text(size: font_size)
-    block(
-      width: 100%,
-      {
-        let all_prev_headings = query(selector(heading).before(loc))
-        if all_prev_headings.len() > 1 {
-          let pre_heading = all_prev_headings.at(-2)
-          let is_same_page = (
-            pre_heading.location().page() == it.location().page()
+    if (it.level > 1) {
+      set text(size: 14pt)
+      v(0.75cm)
+      block(
+        width: 100%,
+        {
+          let all_prev_headings = query(
+            selector(heading).before(here(), inclusive: false),
           )
-          let is_colse = (
-            pre_heading.location().position().y + 250pt
-              > it.location().position().y
-          )
-          let is_parent = pre_heading.level == (it.level - 1)
-          if (is_same_page and is_colse and is_parent) {
-            v(-1em) // make them closer
-          } else {
-            v(2em)
+          if all_prev_headings.len() > 1 {
+            let pre_heading = all_prev_headings.last()
+            let is_same_page = (
+              pre_heading.location().page() == it.location().page()
+            )
+            let is_colse = (
+              pre_heading.location().position().y + 65pt
+                >= it.location().position().y
+            )
+            if (is_same_page and is_colse) {
+              v(-30pt)
+            }
           }
-        } else {
+          set par(justify: false)
+          grid(
+            columns: 2,
+            gutter: 1em,
+            counter(heading).display(it.numbering), it.body,
+          )
           v(1em)
-        }
-        set par(justify: false)
-        grid(
-          columns: 2,
-          gutter: 1em,
-          counter(heading).display(it.numbering), it.body,
-        )
-        v(1em)
-      },
-    )
+        },
+      )
+    }
   }
 
+  // NOTE: heading rule 2 -> apply to all level-1 headings
   show heading.where(level: 1): it => {
     // Start a chapter on a new page unless it's the 1st chapter,
     // in which case it is already on a new page.
-    if counter(heading).get() != (1,) {
+    if counter(heading).get().at(0) != 1 {
       pagebreak()
     }
 
@@ -137,6 +135,13 @@
       )
     }
   }
+
+  // WARN: the order of heading-rule-1 and heading-rule-2 is important
+  // WARN: this is because that the first rule only redering all heading except for level-1
+  // WARN: then the seoncd rule renders the level-1 headings
+  // WARN: swaping of the order will make the rendering rule of level-1 headings be overwritten
+  // WARN: which makes level-1 headings disapper
+
   // display contents
   [#it]
 }

@@ -2,6 +2,9 @@
   set page(numbering: "i")
   counter(page).update(1)
 
+  // text size except for outline title
+  set text(size: 12pt)
+
   show outline: it => {
     show heading: it => {
       set text(size: 17pt)

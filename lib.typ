@@ -86,8 +86,8 @@
         doc,
       )
     },
-    mainmatter_or_appendix: doc => {
-      mainmatter_or_appendix(mode: in_mode, doc)
+    mainmatter_or_appendix: (mode, doc) => {
+      mainmatter_or_appendix(mode: mode, doc)
     },
   )
 }

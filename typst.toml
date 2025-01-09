@@ -1,5 +1,5 @@
 [package]
-name = "ncku-thesis-typst"
+name = "ncku-thesis-template"
 version = "0.1.0"
 entrypoint = "lib.typ"
 authors = ["Haouo"]

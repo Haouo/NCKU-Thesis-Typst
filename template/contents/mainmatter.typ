@@ -1,40 +1,6 @@
-#import "../layouts/whole.typ": whole
-#import "../layouts/mainmatter.typ": mainmatter
-#import "../pages/cover.typ": cover
-#import "../pages/outline.typ": *
-#import "../pages/approved-by.typ": approved_by
-#import "../pages/abstract.typ": *
+#import "../../layouts/mainmatter-or-appendix.typ": mainmatter_or_appendix
 
-#show: it => whole(lang_en: true, lang_zh_tw: false, it)
-
-// cover...
-#cover(degree: "master")
-
-#approved_by()
-
-#abstract_zh_tw(keywords: ("關鍵字一", "關鍵字二", "關鍵字三"))[
-  #lorem(200)
-
-  #lorem(100)
-]
-
-#abstract_en(keywords: ("key 1", "key 2", "key 3"))[
-  #lorem(200)
-
-  #lorem(100)
-]
-
-// list of ...
-
-// acknowledge ...
-
-// abstract ...
-
-// outline
-
-#outline_of_mainmatter()
-
-#show: mainmatter
+#show: mainmatter_or_appendix.with(type: (mainmatter: true, appendix: false))
 
 = #lorem(5)
 
@@ -51,7 +17,7 @@
 #lorem(5)
 
 #figure(
-  image("images/test.jpg", height: 30%),
+  rotate(90deg, image("../images/test.jpg", height: 20%)),
   caption: [This is a simple image],
 )
 
@@ -112,3 +78,4 @@
 
 #lorem(1000)
 
+#pagebreak()

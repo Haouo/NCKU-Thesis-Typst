@@ -1,12 +1,12 @@
 [package]
 name = "ncku-thesis-typst"
-version = "0.0.0"
+version = "0.1.0"
 entrypoint = "lib.typ"
 authors = ["Haouo"]
 license = "MIT"
 description = "NCKU Thesis template in typst"
 repository = "https://github.com/Haouo/NCKU-Thesis-Typst"
-keywords = ["NCKU", "thesis"]
+keywords = ["NCKU", "thesis", "dissertation", "template"]
 categories = ["thesis"]
 exclude = ["images"]
 

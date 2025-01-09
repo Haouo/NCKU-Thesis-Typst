@@ -1,24 +1,28 @@
-#let cover(
+#let make_cover(
+  degree: (master: true, doctor: false),
   institute: "Department of Computer Science and Informantion Engineering",
-  degree: "doctor",
-  title-zh-tw: "以 Typst 撰寫之成功大學碩博士論文模板",
-  title-en: "A Thesis Template written in Typst",
-  student-zh-tw: "張峻豪",
-  student-en: "Chun-Hao Chang",
-  advisor-zh-tw: "蔡家齊 博士",
-  advisor-en: "Dr. Chia-Chi Tsai",
-  coadvisor-zh-tw: ("林某某 博士", "陳某某 博士", "王某某 博士"),
-  coadvisor-en: ("Dr. Ha-Ha Lin", "Dr. Xiao-Xi Chen", "Dr. Po-Penn Wang"),
+  title: (
+    en: "A Thesis/Dissertation Template written in Typst for National Cheng Kung University",
+    zh_tw: "以 Typst 撰寫之國立成功大學碩博士論文模板論文模板",
+  ),
+  student: (en: "Chun-Hao Chang", zh_tw: "張峻豪"),
+  advisor: (en: "Dr. Chia-Chi Tsai", zh_tw: "蔡家齊 博士"),
+  coadvisor: (
+    (en: "Dr. Ha Ha Lin", zh_tw: "林哈哈 博士"),
+    (en: "Dr. Ha Ha Wang", zh_tw: "王哈哈 博士"),
+  ),
 ) = {
   // checking degree
   assert(
-    ((degree == "master") or (degree == "doctor")),
+    (
+      (degree.master and (not degree.doctor))
+        or (degree.doctor and (not degree.master))
+    ), // XOR logic
     message: "Wrong degree configuration!",
   )
 
   // set page margin
   set page(
-    paper: "a4",
     numbering: none,
     margin: (top: 23mm, bottom: 30mm, left: 20mm, right: 20mm),
     background: image("../assets/watermark-20160509_v2-a4.svg"),
@@ -34,7 +38,7 @@
       text(size: 25pt)[#institute],
       v(1cm),
       text(size: 25pt)[
-        #if degree == "master" {
+        #if degree.master {
           [Master Thesis]
         } else {
           [Doctoral Dissertation]
@@ -47,13 +51,23 @@
   place(
     center + horizon,
     stack(
-      text(size: 17pt)[#title-zh-tw],
+      text(size: 17pt)[#title.zh_tw],
       v(1.5em),
-      text(size: 17pt)[#title-en],
+      text(size: 17pt)[#title.en],
     ),
   )
 
   // author info and date
+  // check whether there is any co-advisor
+  let has_coadvisor = (coadvisor.len() > 0)
+  let coadvisor_en = ()
+  let coadvisor_zh_tw = ()
+  if has_coadvisor {
+    for element in coadvisor {
+      coadvisor_en.push(element.en)
+      coadvisor_zh_tw.push(element.zh_tw)
+    }
+  }
   align(bottom + center)[
     // author (2 columns, zh-tw and en)
     // first column: zh-tw ver.
@@ -66,7 +80,7 @@
           align: (right, center, left),
           text(size: 17pt)[學生],
           text(size: 17pt)[:],
-          text(size: 17pt)[#student-zh-tw],
+          text(size: 17pt)[#student.zh_tw],
         ),
         v(1cm),
         grid(
@@ -74,16 +88,18 @@
           align: (right, center, left),
           text(size: 17pt)[指導教授],
           text(size: 17pt)[:],
-          text(size: 17pt)[#advisor-zh-tw],
+          text(size: 17pt)[#advisor.zh_tw],
         ),
-        v(0.75cm),
-        grid(
-          columns: (45%, 10%, 45%),
-          align: (right, center, left),
-          text(size: 17pt)[共同指導教授],
-          text(size: 17pt)[:],
-          text(size: 17pt)[#coadvisor-zh-tw.join("\n")],
-        ),
+        if has_coadvisor { v(0.75cm) } else { none },
+        if has_coadvisor {
+          grid(
+            columns: (45%, 10%, 45%),
+            align: (right, center, left),
+            text(size: 17pt)[共同指導教授],
+            text(size: 17pt)[:],
+            text(size: 17pt)[#coadvisor_zh_tw.join("\n")],
+          )
+        } else { none },
       ),
       // second column: english ver.
       stack(
@@ -92,7 +108,7 @@
           align: (right, center, left),
           text(size: 17pt)[Student],
           text(size: 17pt)[:],
-          text(size: 17pt)[#student-en],
+          text(size: 17pt)[#student.en],
         ),
         v(1cm),
         grid(
@@ -100,16 +116,18 @@
           align: (right, center, left),
           text(size: 17pt)[Advisor],
           text(size: 17pt)[:],
-          text(size: 17pt)[#advisor-en],
+          text(size: 17pt)[#advisor.en],
         ),
-        v(0.75cm),
-        grid(
-          columns: (35%, 10%, 55%),
-          align: (right, center, left),
-          text(size: 17pt)[Co-Advisor],
-          text(size: 17pt)[:],
-          text(size: 17pt)[#coadvisor-en.join("\n")],
-        ),
+        if has_coadvisor { v(0.75cm) } else { none },
+        if has_coadvisor {
+          grid(
+            columns: (35%, 10%, 55%),
+            align: (right, center, left),
+            text(size: 17pt)[Co-Advisor],
+            text(size: 17pt)[:],
+            text(size: 17pt)[#coadvisor_en.join("\n")],
+          )
+        } else { none },
       ),
     )
     // intentionally left vertical space

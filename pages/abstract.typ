@@ -1,49 +1,50 @@
-#let abstract_zh_tw(keywords: (:), it) = [
-  #set align(center)
-  #set heading(numbering: none, outlined: true)
-  #show heading.where(level: 1): set text(21pt)
+#let make_abstract_en(keywords: (), it) = [
+  #set text(12pt)
   #set par(
-    leading: 1.5em,
+    leading: 1.2em,
     first-line-indent: 1em,
     linebreaks: "optimized",
   )
+  #show heading.where(level: 1): set text(21pt)
 
-  = 摘要
+  #align(center)[
+    #heading(
+      level: 1,
+      numbering: none,
+      outlined: true,
+    )[Abstract]]
 
-  #v(1cm)
-  #set align(left)
-  #set text(size: 12pt)
 
+  #v(0.5cm)
+
+  #h(1em) // first-line-indent for first par.
   #it
 
   #v(0.5cm)
-  #set par(first-line-indent: 0em)
-  關鍵字：#keywords.join("、")
+  #h(-1em)
+  Keywords: #keywords.join(", ")
 
   #pagebreak()
 ]
 
-#let abstract_en(keywords: (:), it) = [
-  #set align(center)
-  #set heading(numbering: none, outlined: true)
-  #show heading.where(level: 1): set text(21pt)
+#let make_abstract_zh_tw(keywords: (), it) = [
+  #set text(size: 12pt)
   #set par(
-    leading: 1.5em,
+    leading: 1.2em,
     first-line-indent: 1em,
     linebreaks: "optimized",
   )
+  #show heading.where(level: 1): set text(size: 21pt)
 
-  = Abstract
+  #align(center)[#heading(level: 1, numbering: none, outlined: true)[摘要]]
 
-  #v(1cm)
-  #set align(left)
-  #set text(size: 12pt)
-
+  #v(0.5cm)
+  #h(1em) // first-line-indent for first par.
   #it
 
   #v(0.5cm)
-  #set par(first-line-indent: 0em)
-  Keywords: #keywords.join(", ")
+  #h(-1em)
+  關鍵字：#keywords.join("、")
 
   #pagebreak()
 ]

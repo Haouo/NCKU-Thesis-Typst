@@ -1,17 +1,36 @@
-#let mainmatter(it) = {
-  // check whether the current heading is lavel-1 heading
-  let is-chapter-start-page() = {
-    // find chapter headings on the current page.
-    let all_level_one_heading = query(heading.where(level: 1))
-    let current_page = here().page()
-    return (
-      all_level_one_heading
-        .filter(it => {
-          it.location().page() == current_page
-        })
-        .len()
-        > 0
-    )
+// Helper function: check whether the current heading is lavel-1 heading
+#let is-chapter-start-page() = {
+  // find chapter headings on the current page.
+  let all_level_one_heading = query(heading.where(level: 1))
+  let current_page = here().page()
+  return (
+    all_level_one_heading
+      .filter(it => {
+        it.location().page() == current_page
+      })
+      .len()
+      > 0
+  )
+}
+
+/*
+ * NOTE: this should be applied to the mainmatter of the thesis/dissertation which excludes the appendix part
+ */
+#let mainmatter_or_appendix(type: (mainmatter: true, appendix: false), doc) = {
+  // check type
+  assert(
+    (
+      (type.mainmatter and (not type.appendix))
+        or (type.appendix and (not type.mainmatter))
+    ),
+    message: "You should only chose one type! mainmatter or appendix",
+  )
+
+  // reset heading counter
+  counter(heading).update(0)
+  // reset page counter only when it is called as mainmatter type
+  if type.mainmatter {
+    counter(page).update(1)
   }
 
   // Set the page numbering to arabic numerals.
@@ -32,7 +51,6 @@
           .at(0)
 
         smallcaps([Chapter ] + str(current_chapter_number) + ".")
-        smallcaps[test]
         h(0.75em)
         smallcaps(current_chapter_heading.body)
         h(1fr)
@@ -47,18 +65,30 @@
     },
   )
 
-  counter(page).update(1)
-
   // set paragraph
   set par(
-    leading: 1.5em,
+    leading: 1.2em,
     first-line-indent: 1em,
     linebreaks: "optimized",
   )
-  // WARN: par is not locatable
 
-  // set heading numbering rule
-  set heading(numbering: "1.1.1")
+  // set heading numbering rule with custom numbering function
+  let custom_numbering(..args) = {
+    if type.mainmatter {
+      if args.pos().len() == 1 {
+        "Chapter " + str(args.pos().at(0)) + "."
+      } else {
+        numbering("1.1.1.", ..args)
+      }
+    } else {
+      if args.pos().len() == 1 {
+        "Appendix " + numbering("A", args.pos().at(0)) + "."
+      } else {
+        numbering("A.1.1.", ..args)
+      }
+    }
+  }
+  set heading(numbering: custom_numbering)
 
   // NOTE: heading rule 1 -> apply to all headings except for level-1 heading
   show heading: it => {
@@ -125,8 +155,8 @@
         block(
           width: 100%,
           {
-            set text(size: 24pt)
-            text([Chapter ] + counter(heading).display(it.numbering))
+            set text(size: 21pt)
+            text(counter(heading).display(it.numbering))
             linebreak()
             it.body
             v(1.2cm)
@@ -143,6 +173,6 @@
   // WARN: which makes level-1 headings disapper
 
   // display contents
-  [#it]
+  doc
 }
 

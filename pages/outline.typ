@@ -1,13 +1,15 @@
-#let outline_of_mainmatter() = {
-  set page(numbering: "i")
-  counter(page).update(1)
-
+#let make_outline() = {
   // text size except for outline title
   set text(size: 12pt)
 
+  // set leading of outline (spaceing between lines)
+  set par(leading: 1.2em)
+
+  // outline heading style
   show outline: it => {
+    // change the title style of outline
     show heading: it => {
-      set text(size: 17pt)
+      set text(size: 21pt)
       set align(center)
       it
       v(0.8cm)
@@ -17,14 +19,17 @@
 
   // the intention of the invisible level 1 heading is to
   // make the outline itself appear on the outline
-  [= Table of Content <invisible>]
-  outline(
-    indent: auto,
-    title: [Table of Contents],
-  )
+  [
+    #show heading: none
+    = Table of Contents
+  ]
+  outline(title: [Table of Contents], indent: auto)
   pagebreak()
 
-  [= List of Table <invisible>]
+  [
+    #show heading: none
+    = List of Table
+  ]
   outline(
     indent: auto,
     title: [List of Tables],
@@ -32,7 +37,10 @@
   )
   pagebreak()
 
-  [= List of Figures <invisible>]
+  [
+    #show heading: none
+    = List of Figures
+  ]
   outline(
     indent: auto,
     title: [List of Figures],

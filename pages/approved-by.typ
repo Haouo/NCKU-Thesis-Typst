@@ -1,4 +1,4 @@
-#let approved_by(
+#let make_approved_by(
   degree: "doctor",
   title-zh-tw: "以 Typst 撰寫之國立成功大學碩博士論文模板",
   title-en: "A Thesis/Dissertation Template written in Typst\nfor National Cheng Kung University",
@@ -11,7 +11,7 @@
     margin: (top: 23mm, bottom: 30mm, left: 20mm, right: 20mm),
   )
 
-  let degree_show = if degree == "master" [博士論文] else [碩士論文]
+  let degree_show = if degree == "doctor" [博士論文] else [碩士論文]
 
   set align(top + center)
   stack(

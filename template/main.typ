@@ -1,15 +1,35 @@
-#import "../layouts/whole.typ": whole
-#import "../pages/cover.typ": make_cover
-#import "../pages/approved-by.typ": make_approved_by
-#import "../pages/outline.typ": make_outline
-#import "../pages/abstract.typ": make_abstract_en, make_abstract_zh_tw
-#import "../pages/acknowledge.typ": make_acknowledge_en, make_acknowledge_zh_tw
-#import "../pages/ref.typ": make_ref
+#import "../lib.typ": setup
 
-#show: whole.with(main_lang: (en: true, zh_tw: false))
+#let (
+  make_cover,
+  make_abstract_en,
+  make_abstract_zh_tw,
+  make_acknowledge_en,
+  make_acknowledge_zh_tw,
+  make_outline,
+  make_ref,
+  whole,
+  extended_abstract_en,
+  mainmatter_or_appendix,
+) = setup(
+  in_degree: (master: false, doctor: true),
+  in_institute: "Department of Electrical Engineering",
+  in_title: (
+    en: "A Thesis/Dissertation Template written in Typst for National Cheng Kung University",
+    zh_tw: "以 Typst 撰寫之國立成功大學碩博士論文模板論文模板",
+  ),
+  in_student: (en: "Chun-Hao Chang", zh_tw: "張峻豪"),
+  in_advisor: (en: "Dr. Chia-Chi Tsai", zh_tw: "蔡家齊 博士"),
+  in_coadvisor: (
+    (en: "Dr. Ha-Ha Lin", zh_tw: "林哈哈 博士"),
+  ), // must make this argument be a array which contains one or many dict, so the trailing comma is important for the scenario with only one co-advisor
+  in_main_lang: (en: true, zh_tw: false),
+)
+
+#show: whole
 
 // NOTE: generate cover page
-#make_cover(degree: (master: false, doctor: true))
+#make_cover()
 
 #set page(numbering: "i")
 #counter(page).update(1)
@@ -40,6 +60,9 @@
   #lorem(100)
 ]
 
+// NOTE: include extended abstract (english ver.)
+#include "contents/extended-abstract-en.typ"
+
 #make_acknowledge_zh_tw[
   #lorem(250)
 ]
@@ -51,14 +74,11 @@
 // NOTE: generate outline (includes list-of-table and list-of-figure)
 #make_outline()
 
-// NOTE: include extended abstract (english ver.)
-#include "contents/extended-abstract.en.typ"
-
 // NOTE: imclude mainmatter part
 #include "contents/mainmatter.typ"
 
 // NOTE: generate reference section
-#make_ref(file: "../template/ref.bib")
+#make_ref("../template/ref.bib")
 
 // NOTE: include appendices
 #include "contents/appendix.typ"

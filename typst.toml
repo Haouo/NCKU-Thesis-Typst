@@ -4,13 +4,13 @@ version = "0.1.0"
 entrypoint = "lib.typ"
 authors = ["Haouo"]
 license = "MIT"
-description = "NCKU Thesis template in typst"
+description = "A Thesis/Dissertation Template written in Typst for National Cheng Kung University"
 repository = "https://github.com/Haouo/NCKU-Thesis-Typst"
 keywords = ["NCKU", "thesis", "dissertation", "template"]
-categories = ["thesis"]
-exclude = ["images"]
+categories = ["paper", "thesis"]
+compiler = "0.12.0"
 
 [template]
 path = "template"
-entrypoint = "thesis.typ"
-thumbnail = "example-thesis.png"
+entrypoint = "main.typ"
+thumbnail = "example-pdf.png"

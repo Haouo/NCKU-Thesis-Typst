@@ -1,6 +1,6 @@
 #import "../../layouts/mainmatter-or-appendix.typ": mainmatter_or_appendix
 
-#show: mainmatter_or_appendix.with(type: (mainmatter: false, appendix: true))
+#show: mainmatter_or_appendix.with(mode: (mainmatter: false, appendix: true))
 
 = this is a appendix
 

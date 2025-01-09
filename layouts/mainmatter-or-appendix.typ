@@ -13,23 +13,44 @@
   )
 }
 
+// define custom numbering function
+#let custom_numbering_mainmatter(..args) = {
+  if args.pos().len() == 1 {
+    "Chapter " + str(args.pos().at(0)) + "."
+  } else {
+    numbering("1.1.1.", ..args)
+  }
+}
+#let custom_numbering_appendix(..args) = {
+  if args.pos().len() == 1 {
+    "Appendix " + numbering("A", args.pos().at(0)) + "."
+  } else {
+    numbering("A.1.1.", ..args)
+  }
+}
+
 /*
  * NOTE: this should be applied to the mainmatter of the thesis/dissertation which excludes the appendix part
  */
-#let mainmatter_or_appendix(type: (mainmatter: true, appendix: false), doc) = {
-  // check type
+#let mainmatter_or_appendix(mode: (mainmatter: true, appendix: false), doc) = {
+  // check mode
   assert(
     (
-      (type.mainmatter and (not type.appendix))
-        or (type.appendix and (not type.mainmatter))
+      (mode.mainmatter and (not mode.appendix))
+        or (mode.appendix and (not mode.mainmatter))
     ),
-    message: "You should only chose one type! mainmatter or appendix",
+    message: "You should only chose one mode! mainmatter or appendix",
   )
+
+  // chose custom numbering function type according to mode
+  let custom_numbering(..args) = if mode.mainmatter {
+    custom_numbering_mainmatter(..args)
+  } else { custom_numbering_appendix(..args) }
 
   // reset heading counter
   counter(heading).update(0)
-  // reset page counter only when it is called as mainmatter type
-  if type.mainmatter {
+  // reset page counter only when it is called as mainmatter mode
+  if mode.mainmatter {
     counter(page).update(1)
   }
 
@@ -46,13 +67,17 @@
           heading.where(level: 1).before(here()),
         )
         let current_chapter_heading = level_1_heading_so_far.last()
-        let current_chapter_number = counter(heading)
-          .at(current_chapter_heading.location())
-          .at(0)
 
-        smallcaps([Chapter ] + str(current_chapter_number) + ".")
-        h(0.75em)
-        smallcaps(current_chapter_heading.body)
+        // smallcaps([Chapter ] + str(current_chapter_number) + ".")
+        // h(0.75em)
+        // smallcaps(current_chapter_heading.body)
+        // display chapter info on the left
+        smallcaps(
+          custom_numbering(counter(heading).get().at(0))
+            + " "
+            + current_chapter_heading.body,
+        )
+        // display page number on the right
         h(1fr)
         counter(page).display() // page number
       }
@@ -72,22 +97,6 @@
     linebreaks: "optimized",
   )
 
-  // set heading numbering rule with custom numbering function
-  let custom_numbering(..args) = {
-    if type.mainmatter {
-      if args.pos().len() == 1 {
-        "Chapter " + str(args.pos().at(0)) + "."
-      } else {
-        numbering("1.1.1.", ..args)
-      }
-    } else {
-      if args.pos().len() == 1 {
-        "Appendix " + numbering("A", args.pos().at(0)) + "."
-      } else {
-        numbering("A.1.1.", ..args)
-      }
-    }
-  }
   set heading(numbering: custom_numbering)
 
   // NOTE: heading rule 1 -> apply to all headings except for level-1 heading

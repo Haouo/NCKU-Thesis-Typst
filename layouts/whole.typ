@@ -31,7 +31,7 @@
   )
 
   // make objects with "invisible" lebel be hidden
-  // show label("invisible"): it => { }
+  show label("invisible"): it => { }
 
   // display the content
   doc

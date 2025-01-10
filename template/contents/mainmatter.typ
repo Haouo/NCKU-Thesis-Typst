@@ -1,6 +1,6 @@
-#import "../setup.typ": mainmatter_or_appendix
+#import "../setup.typ": mainmatter-or-appendix
 
-#show: mainmatter_or_appendix.with(mode: (mainmatter: true, appendix: false))
+#show: mainmatter-or-appendix.with(mode: (mainmatter: true, appendix: false))
 
 = #lorem(5)
 
@@ -17,7 +17,7 @@
 #lorem(5)
 
 #figure(
-  rotate(90deg, image("../images/test.jpg", height: 20%)),
+  rotate(90deg, image("../images/image1.jpg", height: 20%)),
   caption: [This is a simple image],
 )
 

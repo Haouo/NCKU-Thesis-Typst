@@ -1,17 +1,12 @@
-#let make_ref(file: "") = {
-  assert(
-    file != "",
-    message: "You should specify the path to bibliography file!",
-  )
-
+#let make_ref(ref: none) = {
   show heading.where(level: 1): it => {
     set align(center)
     set text(size: 21pt)
     it
     v(1cm)
   }
-  set page(numbering: "1.")
+  set page(numbering: "1")
 
-  bibliography(file, title: "Reference", full: true)
+  ref
   pagebreak()
 }

@@ -68,14 +68,14 @@
     make_outline: () => {
       make_outline()
     },
-    make_ref: file => {
-      make_ref(file: file)
+    make_ref: ref => {
+      make_ref(ref: ref)
     },
     // NOTE: layouts
     whole: doc => {
       whole(main_lang: in_main_lang, doc)
     },
-    extended_abstract_en: (summary, keywords, doc) => {
+    extended_abstract_en: (summary: [], keywords: (), doc) => {
       extended_abstract_en(
         title_en: in_title.en,
         institute: in_institute,
@@ -86,7 +86,7 @@
         doc,
       )
     },
-    mainmatter_or_appendix: (mode, doc) => {
+    mainmatter_or_appendix: (mode: (:), doc) => {
       mainmatter_or_appendix(mode: mode, doc)
     },
   )

@@ -1,4 +1,4 @@
-#import "../../layouts/mainmatter-or-appendix.typ": mainmatter_or_appendix
+#import "../setup.typ": mainmatter_or_appendix
 
 #show: mainmatter_or_appendix.with(mode: (mainmatter: true, appendix: false))
 

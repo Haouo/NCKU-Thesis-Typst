@@ -138,4 +138,8 @@
 
   // ensure page-break
   pagebreak()
+
+  // documents behind cover page: numbered with roman number
+  counter(page).update(1) // reset page numb. counter
+  set page(numbering: "i")
 }

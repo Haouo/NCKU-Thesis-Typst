@@ -49,10 +49,6 @@
 
   // reset heading counter
   counter(heading).update(0)
-  // reset page counter only when it is called as mainmatter mode
-  if mode.mainmatter {
-    counter(page).update(1)
-  }
 
   // Set the page numbering to arabic numerals.
   //

@@ -16,6 +16,8 @@
   whole,
   extended_abstract_en,
   mainmatter_or_appendix,
+  begin_of_roman_page_num,
+  begin_of_arabic_page_num,
 ) = setup(
   in_degree: (master: false, doctor: true),
   in_institute: "Department of Electrical Engineering",

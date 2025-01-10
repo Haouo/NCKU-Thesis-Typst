@@ -2,11 +2,12 @@
 #import "layouts/mainmatter-or-appendix.typ": mainmatter_or_appendix
 #import "layouts/extended-abstract-en.typ": extended_abstract_en
 #import "pages/cover.typ": *
-#import "pages/approved-by.typ": *
-#import "pages/acknowledge.typ": *
+// #import "pages/approved-by.typ": *
 #import "pages/abstract.typ": *
+#import "pages/acknowledge.typ": make_acknowledge_en, make_acknowledge_zh_tw
 #import "pages/outline.typ": make_outline
 #import "pages/ref.typ": make_ref
+#import "utils/page-numb.typ": begin_of_roman_page_num, begin_of_arabic_page_num
 
 #let setup(
   in_degree: (master: false, doctor: false),
@@ -88,6 +89,12 @@
     },
     mainmatter_or_appendix: (mode: (:), doc) => {
       mainmatter_or_appendix(mode: mode, doc)
+    },
+    begin_of_roman_page_num: doc => {
+      begin_of_roman_page_num(doc)
+    },
+    begin_of_arabic_page_num: doc => {
+      begin_of_arabic_page_num(doc)
     },
   )
 }

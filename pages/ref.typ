@@ -5,8 +5,6 @@
     it
     v(1cm)
   }
-  set page(numbering: "1")
-
   ref
   pagebreak()
 }

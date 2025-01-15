@@ -1,5 +1,5 @@
-// Helper function: check whether the current heading is lavel-1 heading
 #let is-chapter-start-page() = {
+  /* Helper function: check whether the current heading is lavel-1 heading */
   // find chapter headings on the current page.
   let all-level-one-heading = query(heading.where(level: 1))
   let current-page = here().page()
@@ -36,8 +36,7 @@
   // check mode
   assert(
     (
-      (mode.mainmatter and (not mode.appendix))
-        or (mode.appendix and (not mode.mainmatter))
+      (mode.mainmatter and (not mode.appendix)) or (mode.appendix and (not mode.mainmatter))
     ),
     message: "You should only chose one mode! mainmatter or appendix",
   )
@@ -59,9 +58,7 @@
     numbering: "1",
     header: context {
       if not is-chapter-start-page() {
-        let level-1-heading-so-far = query(
-          heading.where(level: 1).before(here()),
-        )
+        let level-1-heading-so-far = query(heading.where(level: 1).before(here()))
         let current-chapter-heading = level-1-heading-so-far.last()
 
         // smallcaps([Chapter ] + str(current-chapter-number) + ".")
@@ -69,9 +66,7 @@
         // smallcaps(current-chapter-heading.body)
         // display chapter info on the left
         smallcaps(
-          custom-numbering(counter(heading).get().at(0))
-            + " "
-            + current-chapter-heading.body,
+          custom-numbering(counter(heading).get().at(0)) + " " + current-chapter-heading.body,
         )
         // display page number on the right
         h(1fr)
@@ -103,17 +98,14 @@
       block(
         width: 100%,
         {
-          let all-prev-headings = query(
-            selector(heading).before(here(), inclusive: false),
-          )
+          let all-prev-headings = query(selector(heading).before(here(), inclusive: false))
           if all-prev-headings.len() > 1 {
             let pre-heading = all-prev-headings.last()
             let is-same-page = (
               pre-heading.location().page() == it.location().page()
             )
             let is-colse = (
-              pre-heading.location().position().y + 65pt
-                >= it.location().position().y
+              pre-heading.location().position().y + 65pt >= it.location().position().y
             )
             if (is-same-page and is-colse) {
               v(-30pt)

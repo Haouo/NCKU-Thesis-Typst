@@ -107,7 +107,7 @@ which provided extensive references in terms of ideas and formatting.
 > ```typst
 > #let dict-1 = (a: 1, b: 2)
 > #let (a, b) = dict-1
-> [#a and #b]
+> #a and #b
 > ```
 >
 > 當我們編譯以上的 Typst code 的時候會看到文件上顯示 __1 and 2__。

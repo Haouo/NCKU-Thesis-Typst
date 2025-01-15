@@ -1,14 +1,15 @@
-/*
- * NOTE: this is the global settings which applys to the whole documents
- * NOTE: includes cover, abstract, acknowledge, mainmatter, reference and appendix
- *
- * @param main-lang: the main language to writting the thesis/dissertation
- * @param doc: contents of the following documents which the show rule apply to
- */
 #let whole(
   main-lang: (en: true, zh-tw: false),
   doc,
 ) = {
+  /*
+   * NOTE: this is the global settings which applys to the whole documents
+   * NOTE: includes cover, abstract, acknowledge, mainmatter, reference and appendix
+   *
+   * @param main-lang: the main language to writting the thesis/dissertation
+   * @param doc: contents of the following documents which the show rule apply to
+   */
+
   // check the lang type setting
   assert(
     (

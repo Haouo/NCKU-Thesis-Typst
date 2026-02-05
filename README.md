@@ -116,7 +116,7 @@ which provided extensive references in terms of ideas and formatting.
 
 具體來說，這十二個函式的參數類別分別如下（括號中沒東西代表不必傳入參數）：
 
-1. `make_cover()`
+1. `make-cover()`
 2. `make-abstract-en(keywords: (), doc)`
 3. `make-abstract-zh-tw(keywords: (), doc)`
 4. `make-acknowledge-en(doc)`
@@ -134,10 +134,110 @@ which provided extensive references in terms of ideas and formatting.
 
 ### `setup.typ`
 
-為了避免 _cyclic import_ 的編譯錯誤，所以我們不能直接在 `main.typ` 中呼叫 `setup()` function，因此我們必須額外建立一個新的檔案，使其可以被 `main.typ` 和 `contents/` 資料夾底下檔案給 imported。
+為了避免 _cyclic import_ 的編譯錯誤，所以我們不能直接在 `main.typ` 中呼叫 `setup()` function，因此我們必須額外建立一個新的檔案，使其可以被 `main.typ` 和 `contents/` 資料夾底下檔案給 import。參考的 `setup.typ` 如下所示：
 
-TODO
+```typst
+#import "@preview/ncku-later:0.1.0": setup
+
+/*
+ * WARN:
+ * this file should not contain any contents of the thesis/dissertation
+ * this file should be imported by other files with the contents of thesis/dissertation
+ */
+#let (
+  make-cover,
+  make-abstract-en,
+  make-abstract-zh-tw,
+  make-acknowledge-en,
+  make-acknowledge-zh-tw,
+  make-outline,
+  make-ref,
+  whole,
+  extended-abstract-en,
+  mainmatter-or-appendix,
+  begin-of-roman-page-num,
+  begin-of-arabic-page-num,
+) = setup(
+  in-degree: (master: false, doctor: true),
+  in-institute: "Department of Electrical Engineering",
+  in-title: (
+    en: "A Thesis/Dissertation Template written in Typst for National Cheng Kung University",
+    zh-tw: "以 Typst 撰寫之國立成功大學碩博士論文模板論文模板",
+  ),
+  in-student: (en: "Chun-Hao Chang", zh-tw: "張峻豪"),
+  in-advisor: (en: "Dr. Chia-Chi Tsai", zh-tw: "蔡家齊 博士"),
+  in-coadvisor: (
+    (en: "Dr. Ha-Ha Lin", zh-tw: "林哈哈 博士"),
+  ), // must make this argument be a array which contains one or many dict, so the trailing comma is important for the scenario with only one co-advisor
+  in-main-lang: (en: true, zh-tw: false),
+)
+```
+
+接下來我們就可以開始撰寫我們的論文本體的內容。
 
 ### `main.typ` and `contents/`
 
-TODO
+當你的論文本身內容和章節非常多的時候，我們就不建議你把整篇論文都放在一個 `.typ` 檔案裡面。
+因此，建議的做法應該是依照不同的章節屬性來區分檔案，或甚至可以切分地更細（e.g., 本文又可以依照不同章節來分割檔案）。
+
+在 `template/` 底下的範例中，File Tree 長這樣：
+
+```bash
+.
+├── template
+│   ├── contents
+│   │   ├── abstract.typ
+│   │   ├── acknowledgement.typ
+│   │   ├── appendix.typ
+│   │   ├── extended-abstract-en.typ
+│   │   └── mainmatter.typ
+│   ├── images
+│   │   └── image1.png
+│   ├── main.pdf
+│   ├── main.typ
+│   ├── ref.bib
+│   └── setup.typ
+```
+我們可以看到，除了最基本的 `setup.typ` 以外，還有 `main.typ` 以及 `contents/` 底下的數個檔案。
+讓我們先來看 `main.typ` 的內容：
+
+```typst
+#import "setup.typ": *
+
+#show: whole // rules and styles which applys to the whole document
+
+// NOTE: generate cover page
+#make-cover()
+
+// NOTE: set page number (using roman numb.)
+#show: begin-of-roman-page-num
+
+// NOTE: include abstracts (english and zh-tw)
+#include "contents/abstract.typ"
+
+// NOTE: include extended abstract (english ver.)
+#include "contents/extended-abstract-en.typ"
+
+// NOTE: include acknowledgements (english and zh-tw)
+#include "contents/acknowledgement.typ"
+
+// NOTE: generate outline (includes list-of-table and list-of-figure)
+#make-outline()
+
+// NOTE: set page number (using arabic numb.)
+#show: begin-of-arabic-page-num
+
+// NOTE: imclude mainmatter part
+#include "contents/mainmatter.typ"
+
+// NOTE: generate reference section
+#make-ref(bibliography(title: "Reference", full: true, "ref.bib"))
+
+// NOTE: include appendices
+#include "contents/appendix.typ"
+```
+
+我們可以看到 `main.typ` 的內容很簡單，基本上除了 `#import "setup.typ": \*` 以外，就是 `#include contents/...` 底下的各個檔案。
+基本上，你可以把 `main.typ` 當成 Typst 編譯時的入口點（Entrtypoint），當我們編譯的時候，只要從 `main.typ` 開始，就可以編譯完整篇論文（可以參考 Makefile）。
+其他 functions 的使用方式，則可以參考 `contents/` 底下各個 `.typ` 檔案的內容。
+
